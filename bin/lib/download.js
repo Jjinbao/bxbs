@@ -6,16 +6,17 @@ const spinner = require("./spinner")
 const os = require("os")
 const { deletePath , unzipFile } = require("./io")
 
-exports.downloadTemplate = function (templateName,projectName,callBack){
+exports.downloadTemplate = function (projectName,callBack){
 
     // 根据templateName拼接github对应的压缩包url
-    const url = `https://github.com/liuboshuo/${templateName}/archive/master.zip`;
+    const url = `https://github.com/Jjinbao/bxbs-template/archive/master.zip`;
+    // const url = `https://github.com/liuboshuo/${templateName}/archive/master.zip`;
 
     // 压缩包下载的目录，这里是在系统临时文件目录创建一个目录
     const tempProjectPath = fs.mkdtempSync(path.join(os.tmpdir(), `${projectName}-`));
 
     // 压缩包保存的路径
-    const file = path.join(tempProjectPath,`${templateName}.zip`);
+    const file = path.join(tempProjectPath,`bxbs-template.zip`);
 
     // 判断压缩包在系统中是否存在
     if(fs.existsSync(file)){

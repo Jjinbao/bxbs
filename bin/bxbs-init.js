@@ -29,16 +29,6 @@ const questions = [
         type: 'input',
         name:'projectName',
         message: chalk.yellow("输入你的项目名字：")
-    },
-    {
-        type:'list',
-        name:'template',
-        message: chalk.yellow("请选择创建项目模板："),
-        choices:[
-            {name:"lb-react-apps-template",value:"lb-react-apps-template"},
-            {name:"template2",value:"tempalte2"},
-            {name:"template3",value:"tempalte3"}
-        ]
     }
 ];
 
@@ -52,21 +42,19 @@ inquirer.prompt(questions).then(result=>{
     if(result.projectName) {
         projectName = result.projectName;
     }
-    const templateName = result.template;
     // 获取projectName templateName
     console.log("项目名称：" + projectName)
-    console.log("模板名称：" + templateName)
-    if(!templateName || !projectName){
+    if(!projectName){
         // 退出
         logger.exit();
     }
     // 往下走
-    checkProjectExits(projectName,templateName); // 检查目录是否存在
+    checkProjectExits(projectName); // 检查目录是否存在
 }).catch(error=>{
     logger.exit(error);
 })
 
-function checkProjectExits(projectName,templateName){
+function checkProjectExits(projectName){
     const currentPath = process.cwd();
     const filePath = path.join(currentPath,`${projectName}`); // 获取项目的真实路径
     // 打印路径
@@ -77,7 +65,7 @@ function checkProjectExits(projectName,templateName){
             deletePath(filePath)
             spinner.stopSpinner(false);
         }
-        startDownloadTemplate(projectName, templateName) // 开始下载模板
+        startDownloadTemplate(projectName) // 开始下载模板
         return;
     }
     if(fs.existsSync(filePath)){ // 判断文件是否存在 询问是否继续
@@ -100,23 +88,23 @@ function checkProjectExits(projectName,templateName){
         //     exit(error);
         // })
     }else{
-        startDownloadTemplate(projectName, templateName) // 开始下载模板
+        startDownloadTemplate(projectName) // 开始下载模板
     }
 }
 
-function startDownloadTemplate(projectName,templateName){
+function startDownloadTemplate(projectName){
     // 开始下载模板
-    downloadTemplate(templateName, projectName , (error)=>{
+    downloadTemplate(projectName , (error)=>{
         if(error){
             logger.exit(error);
             return;
         }
         // 替换解压后的模板package.json, index.html关键内容
-        replaceFileContent(projectName,templateName)
+        replaceFileContent(projectName)
     })
 }
 
-function replaceFileContent(projectName,templateName){
+function replaceFileContent(projectName){
     // const currentPath = process.cwd();
     // try{
     //     // 读取项目的package.json
